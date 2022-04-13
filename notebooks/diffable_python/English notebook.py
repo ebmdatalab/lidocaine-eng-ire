@@ -47,6 +47,7 @@ SELECT
 month,
   pct,
   SUM(quantity) AS quantity_of_plasters,
+  SUM(items) AS prescription_items,
   SUM(actual_cost) AS actual_cost,
   SUM(net_cost) AS net_cost
 FROM
