@@ -86,21 +86,6 @@ listsize_df = bq.cached_read(sql2, csv_path=os.path.join('..', 'data''list_size.
 listsize_df['month'] = listsize_df['month'].astype('datetime64[ns]')
 listsize_df.head()
 
-# +
-#Merge data into single dataframe
-
-##df_qty=df_lidocaine.groupby(["month", "pct"])['quantity_of_plasters'].sum().to_frame(name = 'quantity_of_plasters').reset_index()
-##df_qty.head()
-#plot data on graph
-#gaba_df.groupby(["month"])['pregab_mg'].sum().plot(kind='line', title="Total pregabalin mg eq prescribing of gabape
-
-# +
-#merge dataframes
-#per_1000_df = pd.merge(df_qty, listsize_df, on=['month', 'pct'])
-#per_1000_df['plasters_per_1000'] = 1000* (per_1000_df['quantity_of_plasters']/per_1000_df['list_size'])
-#per_1000_df.head()
-# -
-
 lidocaine_and_listsize = pd.merge(df_lidocaine, listsize_df, on=['month', 'pct'])
 lidocaine_and_listsize['plasters_per_1000'] = 1000* (lidocaine_and_listsize['quantity_of_plasters']/lidocaine_and_listsize['list_size'])
 lidocaine_and_listsize['items_per_1000'] = 1000* (lidocaine_and_listsize['rx_items']/lidocaine_and_listsize['list_size'])
@@ -154,3 +139,5 @@ ax = df_lidocaine.groupby(["month"])['net_cost'].sum().plot(kind='line', title="
 ax.axvline(pd.to_datetime('2017-07-01'), color='black', linestyle='--', lw=2) ##policy announced
 ax.axvline(pd.to_datetime('2017-11-01'), color='black', linestyle='--', lw=2) ##consultation implemented
 plt.ylim(0, )
+
+
