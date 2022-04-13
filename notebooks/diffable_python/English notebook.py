@@ -87,24 +87,6 @@ ax.axvline(pd.to_datetime('2017-07-01'), color='black', linestyle='--', lw=2) ##
 ax.axvline(pd.to_datetime('2017-11-01'), color='black', linestyle='--', lw=2) ##consultation implemented
 plt.ylim(0, )
 
-# ## Listsize Information
-#
-#
-
-# get data for patient list size (all patients)
-sql2 = """
-SELECT month, pct_id AS pct, sum(total_list_size) as list_size
-FROM ebmdatalab.hscic.practice_statistics
-WHERE
-month <= "2015-01-01"
-group by 
-month, pct
-order by
-month, pct
-"""
-listsize_df = bq.cached_read(sql2, csv_path=os.path.join('..', 'data','list_size.csv'))
-listsize_df['month'] = listsize_df['month'].astype('datetime64[ns]')
-listsize_df.head(10)
-
+# +
 
 
