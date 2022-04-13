@@ -44,10 +44,10 @@ pd.set_option('display.float_format', lambda x: '%.2f' % x)
 ## here we will extract all prescribing of Lidocaine patches by ccg (prev named pct)
 sql= '''
 SELECT
-DATE(month) AS month
+DATE(month) AS month,
   pct,
   SUM(quantity) AS quantity_of_plasters,
-  SUM(items) AS prescription_items,
+  SUM(items) AS rx_items,
   SUM(actual_cost) AS actual_cost,
   SUM(net_cost) AS net_cost
 FROM
@@ -63,6 +63,7 @@ GROUP BY
  '''
 
 df_lidocaine = bq.cached_read(sql, csv_path=os.path.join('..', 'data','lidocaine.csv'))
+df_lidocaine['month'] = df_lidocaine['month'].astype('datetime64[ns]')
 df_lidocaine.head(10)
 # -
 
@@ -96,34 +97,61 @@ plt.ylim(0, )
 
 # get data for patient list size (all patients)
 sql2 = """
-SELECT month, pct_id AS pct, sum(total_list_size) as list_size
+SELECT 
+DATE(month) AS month, 
+pct_id AS pct, 
+sum(total_list_size) as list_size
 FROM ebmdatalab.hscic.practice_statistics
 group by 
 month, pct
 order by
 month, pct
 """
-listsize_df = bq.cached_read(sql2, csv_path='list_size.csv')
+listsize_df = bq.cached_read(sql2, csv_path=os.path.join('..', 'data''list_size.csv'))
 listsize_df['month'] = listsize_df['month'].astype('datetime64[ns]')
+listsize_df.head()
 
+# +
 #Merge data into single dataframe
-df_qty=df_lidocaine.groupby(["month", "pct"])['quantity_of_plasters'].sum().to_frame(name = 'qty_plasters').reset_index()
-df_qty.head()
+
+##df_qty=df_lidocaine.groupby(["month", "pct"])['quantity_of_plasters'].sum().to_frame(name = 'quantity_of_plasters').reset_index()
+##df_qty.head()
 #plot data on graph
 #gaba_df.groupby(["month"])['pregab_mg'].sum().plot(kind='line', title="Total pregabalin mg eq prescribing of gabape
 
+# +
 #merge dataframes
-per_1000_df = pd.merge(df_qty, listsize_df, on=['month', 'pct'])
-per_1000_df['plasters_per_1000'] = 1000* (per_1000_df['quantity_of_plasters']/per_1000_df['list_size'])
-per_1000_df.head()
+#per_1000_df = pd.merge(df_qty, listsize_df, on=['month', 'pct'])
+#per_1000_df['plasters_per_1000'] = 1000* (per_1000_df['quantity_of_plasters']/per_1000_df['list_size'])
+#per_1000_df.head()
+# -
+
+lidocaine_and_listsize = pd.merge(df_lidocaine, listsize_df, on=['month', 'pct'])
+lidocaine_and_listsize['plasters_per_1000'] = 1000* (lidocaine_and_listsize['quantity_of_plasters']/lidocaine_and_listsize['list_size'])
+lidocaine_and_listsize['items_per_1000'] = 1000* (lidocaine_and_listsize['rx_items']/lidocaine_and_listsize['list_size'])
+lidocaine_and_listsize['actual_cost_per_1000'] = 1000* (lidocaine_and_listsize['actual_cost']/lidocaine_and_listsize['list_size'])
+lidocaine_and_listsize['net_cost_per_1000'] = 1000* (lidocaine_and_listsize['net_cost']/lidocaine_and_listsize['list_size'])
+lidocaine_and_listsize.head()
 
 # +
 #plot deciles 
 charts.deciles_chart(
-        df_ccg,
+        lidocaine_and_listsize,
         period_column='month',
-        column= 'perc_doacs',
-        title="CCGs - Percentage of DOACs and warfarin \nprescribed as DOACS",
+        column= 'plasters_per_1000',
+        title="CCGs - Plasters per 1000 people",
         show_outer_percentiles=True)
 plt.show()
+# -
+
+
+#plot deciles 
+charts.deciles_chart(
+        lidocaine_and_listsize,
+        period_column='month',
+        column= 'actual_cost_per_1000',
+        title="CCGs - Actual cost of Plasters per 1000 people",
+        show_outer_percentiles=True)
+plt.show()
+
 
