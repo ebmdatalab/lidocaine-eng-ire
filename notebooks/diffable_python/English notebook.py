@@ -44,7 +44,7 @@ pd.set_option('display.float_format', lambda x: '%.2f' % x)
 ## here we will extract all prescribing of Lidocaine patches by ccg (prev named pct)
 sql= '''
 SELECT
-month,
+DATE(month) AS month
   pct,
   SUM(quantity) AS quantity_of_plasters,
   SUM(items) AS prescription_items,
@@ -91,5 +91,39 @@ ax.axvline(pd.to_datetime('2017-11-01'), color='black', linestyle='--', lw=2) ##
 plt.ylim(0, )
 
 # +
+## add list size
+# -
 
+# get data for patient list size (all patients)
+sql2 = """
+SELECT month, pct_id AS pct, sum(total_list_size) as list_size
+FROM ebmdatalab.hscic.practice_statistics
+group by 
+month, pct
+order by
+month, pct
+"""
+listsize_df = bq.cached_read(sql2, csv_path='list_size.csv')
+listsize_df['month'] = listsize_df['month'].astype('datetime64[ns]')
+
+#Merge data into single dataframe
+df_qty=df_lidocaine.groupby(["month", "pct"])['quantity_of_plasters'].sum().to_frame(name = 'qty_plasters').reset_index()
+df_qty.head()
+#plot data on graph
+#gaba_df.groupby(["month"])['pregab_mg'].sum().plot(kind='line', title="Total pregabalin mg eq prescribing of gabape
+
+#merge dataframes
+per_1000_df = pd.merge(df_qty, listsize_df, on=['month', 'pct'])
+per_1000_df['plasters_per_1000'] = 1000* (per_1000_df['quantity_of_plasters']/per_1000_df['list_size'])
+per_1000_df.head()
+
+# +
+#plot deciles 
+charts.deciles_chart(
+        df_ccg,
+        period_column='month',
+        column= 'perc_doacs',
+        title="CCGs - Percentage of DOACs and warfarin \nprescribed as DOACS",
+        show_outer_percentiles=True)
+plt.show()
 
