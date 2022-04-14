@@ -62,7 +62,7 @@ GROUP BY
    pct
  '''
 
-df_lidocaine = bq.cached_read(sql, csv_path=os.path.join('..', 'data','lidocaine.csv'), use_cache=False)
+df_lidocaine = bq.cached_read(sql, csv_path=os.path.join('..', 'data','lidocaine.csv'), use_cache=True)
 df_lidocaine['month'] = df_lidocaine['month'].astype('datetime64[ns]')
 df_lidocaine.head(10)
 
