@@ -51,7 +51,7 @@ DATE(month) AS month,
   SUM(actual_cost) AS actual_cost,
   SUM(net_cost) AS net_cost
 FROM
-  ebmdatalab.hscic.normalised_prescribing_standard AS rx
+  ebmdatalab.hscic.normalised_prescribing AS rx
   INNER JOIN hscic.ccgs AS ccg ON rx.pct = ccg.code 
 WHERE
   bnf_code LIKE "1502010J0%EL" # brand and Lidocaine patches
@@ -62,7 +62,7 @@ GROUP BY
    pct
  '''
 
-df_lidocaine = bq.cached_read(sql, csv_path=os.path.join('..', 'data','lidocaine.csv'), use_cache=True)
+df_lidocaine = bq.cached_read(sql, csv_path=os.path.join('..', 'data','lidocaine.csv'), use_cache=False)
 df_lidocaine['month'] = df_lidocaine['month'].astype('datetime64[ns]')
 df_lidocaine.head(10)
 
