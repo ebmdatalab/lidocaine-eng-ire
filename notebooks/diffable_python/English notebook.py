@@ -82,7 +82,7 @@ month, pct
 order by
 month, pct
 """
-listsize_df = bq.cached_read(sql2, csv_path=os.path.join('..', 'data''list_size.csv'))
+listsize_df = bq.cached_read(sql2, csv_path=os.path.join('..', 'data','list_size.csv'), use_cache=False)
 listsize_df['month'] = listsize_df['month'].astype('datetime64[ns]')
 listsize_df.head()
 
