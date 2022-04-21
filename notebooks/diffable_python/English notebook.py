@@ -92,6 +92,7 @@ lidocaine_and_listsize['plasters_per_1000'] = 1000* (lidocaine_and_listsize['qua
 lidocaine_and_listsize['items_per_1000'] = 1000* (lidocaine_and_listsize['rx_items']/lidocaine_and_listsize['list_size'])
 lidocaine_and_listsize['actual_cost_per_1000'] = 1000* (lidocaine_and_listsize['actual_cost']/lidocaine_and_listsize['list_size'])
 lidocaine_and_listsize['net_cost_per_1000'] = 1000* (lidocaine_and_listsize['net_cost']/lidocaine_and_listsize['list_size'])
+lidocaine_and_listsize.sort_values(by=['month'], inplace=True)
 lidocaine_and_listsize.head()
 
 # +
@@ -126,8 +127,9 @@ plt.plot(df_subject['month'], df_subject['actual_cost_per_1000'], 'r--')
 
 
 plt.show()
-# -
+# +
 
+# -
 
 
 # ## Charts
