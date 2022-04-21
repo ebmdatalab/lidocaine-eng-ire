@@ -101,6 +101,12 @@ charts.deciles_chart(
         column= 'plasters_per_1000',
         title="CCGs - Plasters per 1000 people",
         show_outer_percentiles=True)
+
+#add in example CCG (Newcastle Gateshead)
+df_subject = lidocaine_and_listsize.loc[lidocaine_and_listsize['pct'] == '13T']
+plt.plot(df_subject['month'], df_subject['plasters_per_1000'], 'r--')
+
+
 plt.show()
 
 
@@ -115,7 +121,7 @@ charts.deciles_chart(
 
 #add in example CCG (Newcastle Gateshead)
 df_subject = lidocaine_and_listsize.loc[lidocaine_and_listsize['pct'] == '13T']
-plt.plot(df_subject['month'], df_subject['items_per_1000'], 'r--')
+plt.plot(df_subject['month'], df_subject['actual_cost_per_1000'], 'r--')
 
 
 plt.show()
