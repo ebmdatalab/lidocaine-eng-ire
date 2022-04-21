@@ -35,6 +35,7 @@ import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
 from ebmdatalab import bq, charts, maps
+import numpy as np
 import os
 
 ## ensuring the format is consistent for pounds and pence
