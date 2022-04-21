@@ -82,7 +82,7 @@ month, pct
 order by
 month, pct
 """
-listsize_df = bq.cached_read(sql2, csv_path=os.path.join('..', 'data','list_size.csv'), use_cache=False)
+listsize_df = bq.cached_read(sql2, csv_path=os.path.join('..', 'data','list_size.csv'), use_cache=True)
 listsize_df['month'] = listsize_df['month'].astype('datetime64[ns]')
 listsize_df.head()
 
@@ -102,9 +102,9 @@ charts.deciles_chart(
         title="CCGs - Plasters per 1000 people",
         show_outer_percentiles=True)
 plt.show()
-# -
 
 
+# +
 #plot deciles 
 charts.deciles_chart(
         lidocaine_and_listsize,
@@ -112,7 +112,14 @@ charts.deciles_chart(
         column= 'actual_cost_per_1000',
         title="CCGs - Actual cost of Plasters per 1000 people",
         show_outer_percentiles=True)
+
+#add in example CCG (Newcastle Gateshead)
+df_subject = lidocaine_and_listsize.loc[lidocaine_and_listsize['pct'] == '13T']
+plt.plot(df_subject['month'], df_subject['items_per_1000'], 'r--')
+
+
 plt.show()
+# -
 
 
 
