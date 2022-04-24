@@ -74,13 +74,17 @@ df_lidocaine.head(10)
 # get data for patient list size (all patients)
 sql2 = """
 SELECT 
-DATE(month) AS month, 
-pct_id AS pct, 
-sum(total_list_size) as list_size
-FROM ebmdatalab.hscic.practice_statistics
-group by 
+DATE(stats.month) AS month, 
+prac.ccg_id AS pct, 
+sum(stats.total_list_size) as list_size
+FROM ebmdatalab.hscic.practice_statistics as stats
+INNER JOIN
+ebmdatalab.hscic.practices as prac
+ON
+prac.code = stats.practice
+GROUP BY
 month, pct
-order by
+ORDER BY
 month, pct
 """
 listsize_df = bq.cached_read(sql2, csv_path=os.path.join('..', 'data','list_size.csv'), use_cache=True)
