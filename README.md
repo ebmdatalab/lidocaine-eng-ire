@@ -1,20 +1,6 @@
-# EBM DataLab's skeleton notebook environment
+## LIdocaine prescribing in England and Ireland
 
-## Getting started with this skeleton project
-
-This is a skeleton project for creating a reproducible, cross-platform
-analysis notebook, using Docker.  It also includes:
-
-* configuration for `jupytext`, to support easier code review
-* cross-platform startup scripts
-* best practice folder structure and documentation
-
-Developers and analysts using this skeleton for new development should
-refer to [`DEVELOPERS.md`](DEVELOPERS.md) for instructions on getting
-started.  Update this `README.md` so it is a suitable introduction to
-your project.
-
-If you have not yet installed Docker, please see the [`INSTALLATION_GUIDE.md`](INSTALLATION_GUIDE.md)
+This repo contains the code to accompany our analyis on _[The impact of lidocaine plaster prescribing reduction strategies: A comparison of two national health services in Europe](https://doi.org/10.1111/bcp.15779)_ now published in the British Journal of Clinical Pharmacology.
 
 ## How to view the notebooks
 
@@ -26,6 +12,4 @@ though looking at them in Github should also work.
 To do development work, you'll need to set up a local jupyter server
 and git repository - see `DEVELOPERS.md` for more detail.
 
-## How to cite
 
-XXX Please change to either a paper (if published) or the repo. You may find it helpful to use Zenodo DOI (see [`DEVELOPERS.md`](DEVELOPERS.md#how-to-invite-people-to-cite) for further information)
